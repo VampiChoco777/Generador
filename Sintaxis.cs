@@ -1,6 +1,7 @@
+//Marco Adrián Domínguez Jiménez
 using System;
 
-namespace Generico
+namespace Generador
 {
     public class Sintaxis : Lexico
     {
@@ -13,7 +14,7 @@ namespace Generico
             NextToken();
         }
 
-        public void match(String espera)
+        public void match(string espera)
         {
             if (espera == getContenido())
             {
@@ -21,11 +22,9 @@ namespace Generico
             }
             else
             {
-                //Requerimiento 9 agregar el numero de linea en el error
                 throw new Error("Error de sintaxis, se espera un " + espera + " en linea: " + linea, log);
             }
         }
-
         public void match(Tipos espera)
         {
             if (espera == getClasificacion())
@@ -34,7 +33,6 @@ namespace Generico
             }
             else
             {
-                //Requerimiento 9 agregar el numero de linea en el error
                 throw new Error("Error de sintaxis, se espera un " + espera + " en linea: " + linea, log);
             }
         }

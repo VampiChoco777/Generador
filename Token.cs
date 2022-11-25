@@ -1,4 +1,5 @@
-namespace Generico
+//Marco Adrián Domínguez Jiménez
+namespace Generador
 {
     public class Token
     {
@@ -6,10 +7,7 @@ namespace Generico
         private Tipos Clasificacion;
         public enum Tipos
         {
-            Identificador, Numero, Caracter, Asignacion, Inicializacion,
-            OperadorLogico, OperadorRelacional, OperadorTernario,
-            OperadorTermino, OperadorFactor, IncrementoTermino, IncrementoFactor,
-            FinSentencia, Cadena, TipoDato, Zona, Condicion, Ciclo
+            Produce, SNT, ST, FinProduccion, PIzq, PDer,
         }
 
         public void setContenido(string contenido)
