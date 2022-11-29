@@ -1,11 +1,16 @@
 Archivo: c2.gram
-25/11/2022 09:24:28 a. m.
+29/11/2022 05:33:01 p. m.
+Gramatica ST
+Programas ST
+Librerias ST
+Variables ST
+ListaIdentificadores ST
 Gramatica ST
 : ST
 cplusplus ST
 
  FinProduccion
-dsdsdsd ST
+Programas ST
 -> Produce
 # ST
 Identificador ST

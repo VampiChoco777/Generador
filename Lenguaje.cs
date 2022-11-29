@@ -42,13 +42,34 @@ namespace Generador
         }
         private bool esSNT(string contenido)
         {
-            //return listaSNT.Contains(contenido);
-            return true;
+            return listaSNT.Contains(contenido);
+            //return true;
         }
-        private void agregarSNT(string contenido)
+        private void agregarSNT()
         {
             //Requerimiento 6. 
-            listaSNT.Add(contenido);
+           
+            
+            /*archivo.BaseStream.Seek(posicion-9,SeekOrigin.Begin);*/
+            while(archivo.ReadLine() != null){
+                //Console.WriteLine(getContenido());
+                Console.WriteLine(getContenido());
+                listaSNT.Add(getContenido());
+                NextToken();   
+            }
+            //archivo.
+            //setPosicion(posicion);
+           // archivo.Close();
+           // archivo = new StreamReader("c2.gram");
+            //archivo.BaseStream.Position = 0;
+            //setContenido("");
+            //setLinea(1);
+            archivo.DiscardBufferedData();
+            //archivo.BaseStream.Seek(0,System.IO.SeekOrigin.Begin);
+            archivo.BaseStream.Position = archivo.BaseStream.Seek(0,System.IO.SeekOrigin.Begin);
+            NextToken();
+            //setLinea(1);
+
         }
         private void Tabulacion(string contenido)
         {
@@ -85,10 +106,17 @@ namespace Generador
         private void Programa(string produccionPrincipal)
         {
             tabulador = 0;
-            agregarSNT("Programas");
-            agregarSNT("Librerias");
-            agregarSNT("Variables");
-            agregarSNT("ListaIdentificadores");
+            //int linea_1 = getLinea();
+            //int posicion_1 = getPosicion();
+            //agregarSNT("Programas");
+            //agregarSNT("Librerias");
+            //agregarSNT("Variables");
+            //agregarSNT("ListaIdentificadores",linea_1,posicion_1);
+            /*agregarSNT("Programas",linea_1,posicion_1);
+            agregarSNT("Librerias",linea_1,posicion_1);
+            agregarSNT("Variables",linea_1,posicion_1);
+            agregarSNT("ListaIdentificadores",linea_1,posicion_1);*/
+            
             Tabulacion("using System;");
             Tabulacion("using System.IO;");
             Tabulacion("using System.Collections.Generic;");
@@ -119,8 +147,12 @@ namespace Generador
         public void gramatica()
         {
             //tabulador = 2;
+            agregarSNT();
+            //Console.WriteLine(getContenido());
             cabecera();
+            
             PrimeraProduccion = getContenido();
+            
             Programa(PrimeraProduccion);
             cabeceraLenguaje();
             listaProducciones();
@@ -136,6 +168,7 @@ namespace Generador
         }
         private void cabeceraLenguaje()
         {
+            //int linea_1 = getLinea();
             tabulador = 0;
             Tabulacion("using System;");
             Tabulacion("using System.Collections.Generic;");
@@ -183,14 +216,23 @@ namespace Generador
         }
         private void simbolos()
         {
-            if(getContenido() == "(")
+            if(getContenido() == "\\(")
             {
-                match("(");
-                Tabulacion("if()");
+                match("\\(");
+                if(esTipo(getContenido()))
+                {
+                    Tabulacion("if(getClasificacion() == Tipos."+ getContenido() + ")");
+                }
+                else
+                {
+                    Tabulacion("if(getContenido() == \"" + getContenido() + "\")");
+                }
+                
                 Tabulacion("{");
                 simbolos();
-                match(")");
+                match("\\)");
                 Tabulacion("}");
+                
             }
             else if(esTipo(getContenido()))
             {
@@ -199,7 +241,7 @@ namespace Generador
             }
             else if(esSNT(getContenido()))
             {
-                Tabulacion("match(\"" + getContenido() + "\");");
+                Tabulacion(getContenido() + "();");
                 match(Tipos.ST);
             }
             else if(getClasificacion() == Tipos.ST)
@@ -209,7 +251,7 @@ namespace Generador
             }
             
             
-            if (getClasificacion() != Tipos.FinProduccion && getContenido() != ")")
+            if (getClasificacion() != Tipos.FinProduccion && getContenido() != "\\)")
             {
                 simbolos();
             }

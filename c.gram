@@ -1,6 +1,6 @@
 Gramatica: c;
 {
-    Programa  -> Librerias? Variables? Main
+    Programas  -> Librerias? Variables? Main
     Librerias -> #include<identificador(.h)?> Librerias?
     Variables -> tipo_dato Lista_identificadores; Variables?
     Lista_identificadores -> identificador (,Lista_identificadores)?

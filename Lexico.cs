@@ -15,13 +15,33 @@ namespace Generador
         protected int linea, posicion = 0;
         int[,] TRAND = new int[,]
         {
-            {0,1,5,3,4,5},
-            {F,F,2,F,F,F},
-            {F,F,F,F,F,F},
-            {F,F,F,3,F,F},
-            {F,F,F,F,F,F},
-            {F,F,F,F,F,F},
+           // ws, -, >, L,   EOL,  \,  (,  ), Lamb 
+       /*0*/{ 0,  1,  8,  3,  4,   5,  8,  8,   8 },
+       /*1*/{ F,  F,  2,  F,  F,   F,  F,  F,   F },
+       /*2*/{ F,  F,  F,  F,  F,   F,  F,  F,   F },
+       /*3*/{ F,  F,  F,  3,  F,   F,  F,  F,   F },
+       /*4*/{ F,  F,  F,  F,  F,   F,  F,  F,   F },
+       /*5*/{ F,  F,  F,  F,  F,   F,  6,  7,   F },
+       /*6*/{ F,  F,  F,  F,  F,   F,  F,  F,   F },
+       /*7*/{ F,  F,  F,  F,  F,   F,  F,  F,   F },
+       /*8*/{ F,  F,  F,  F,  F,   F,  F,  F,   F },
         };
+        protected void setLinea(int linea)
+        {
+            this.linea = linea;
+        }
+        protected int getLinea()
+        {
+            return linea;
+        }
+        protected void setPosicion(int posicion)
+        {
+            this.posicion = posicion;
+        }
+        protected int getPosicion()
+        {
+            return posicion;
+        }
         public Lexico()
         {
             linea = 1;
@@ -59,7 +79,7 @@ namespace Generador
             log.WriteLine("Archivo: " + nombre);
             log.WriteLine(DateTime.Now);
 
-            if(Path.GetExtension(nombre) != ".gen")
+            if(Path.GetExtension(nombre) != ".gram")
             {
                 throw new Error("Error: El archivo " + Path.GetFileName(nombre) + " no es un archivo de gramatica", log);
             }
@@ -100,6 +120,16 @@ namespace Generador
                 case 5:
                     setClasificacion(Tipos.ST);
                     break;
+                case 6:
+                    setClasificacion(Tipos.PIzq);
+                    break;
+                case 7:
+                    setClasificacion(Tipos.PDer);
+                    break;
+                case 8:
+                    setClasificacion(Tipos.ST);
+                    break;
+
             }
         }
         private int columna(char c)
@@ -124,7 +154,22 @@ namespace Generador
             {
                 return 3;
             }
-            return 5;
+            else if(c == '\\')
+            {
+                return 5;
+            }
+            else if(c == '(')
+            {
+                return 6;
+            }
+            else if(c == ')')
+            {
+                return 7;
+            }
+            else
+            {
+                return 8;
+            }
         }
         public void NextToken()
         {
@@ -134,12 +179,14 @@ namespace Generador
 
             while (estado >= 0)
             {
-                c = (char)archivo.Peek(); //Funcion de transicion
+                c = (char)archivo.Peek();
+                //Console.WriteLine(archivo,); //Funcion de transicion
                 estado = TRAND[estado, columna(c)];
                 clasifica(estado);
                 if (estado >= 0)
                 {
                     archivo.Read();
+                    //Console.WriteLine(c);
                     posicion++;
                     if (c == '\n')
                     {
